@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Perry High CPU Club</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- bootstrap and jquery -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!-- firebase -->
+        <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>        
+        <script src="https://cdn.firebase.com/libs/firebaseui/2.4.1/firebaseui.js"></script>
+
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBE65o0OWjJmWeEIu8tqkVHpaEAuhy9I_c",
+                authDomain: "phs-cpuclub-portfolio.firebaseapp.com",
+                databaseURL: "https://phs-cpuclub-portfolio.firebaseio.com",
+                projectId: "phs-cpuclub-portfolio"
+            };
+            firebase.initializeApp(config);
+            var db = firebase.firestore();
+        </script>
+        <script src="/CPUClub/auth.js"></script>        
+        <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.4.1/firebaseui.css" />
+
+        <link rel="stylesheet" href="/CPUClub/style.css">
+
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href="#">Perry High CPU Club</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="/CPUClubPortfolio">Projects Gallery</a></li>
+                        <li style="display: none;" class="admin"><a href="/CPUClub/admin.html">Admin</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="sign-in"><a href="#" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Sign in</a></li>
+                        <li id="signedin">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span id="username"></span>&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/CPUClub/user.html">Profile</a></li>                                
+                                <li><a href="#">Portfolio</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" onclick="firebase.auth().signOut();">Sign out&nbsp;<span class="glyphicon glyphicon-log-out"></span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-3"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <h2>Member info:</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label for="userName">
+                                            Name
+                                        </label>
+                                        <input type="text" class="form-control" id="userName" />
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="affiliation">
+                                            Affiliation
+                                        </label>
+                                        <input type="password" class="form-control" id="affiliation" />
+                                    </div> 
+                                    <button class="btn btn-default pull-right" onclick="return false;">
+                                        Update
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <button class="btn btn-default btn-overlay"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" />
+                                
+                            </div>
+                            <div class="col-md-4">
+                                <div class="list-group">
+                                    <span class="list-group-item active">Portfolio</span>
+                                    <div class="list-group-item">
+                                        <span class="list-group-item-text">
+                                            Project 1
+                                        </span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <p class="list-group-item-text">
+                                            Project 2
+                                        </p>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <p class="list-group-item-text">
+                                            Project 3
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="firebaseui-auth-container"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="container-fluid text-center">
+            <p>Copyright &copy; 2017 Perry High CPU Club.</p>
+        </footer>
+    </body>
+</html>

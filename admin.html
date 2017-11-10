@@ -72,246 +72,266 @@
         </div>
 
         <div class="container-fluid">
-            <h2>Membership Roster:</h2>
-            <div id="membership">                
-                <h2>You must be an admin to access the membership roster.</h2>
-            </div>
-        </div>
+            <div class="tabbable" id="tabs-265741">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#member-panel" data-toggle="tab">Members</a>
+                    </li>
+                    <li>
+                        <a href="#event-panel" data-toggle="tab">Events</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="member-panel">
+                        <h3>Membership Roster:</h3>
+                        <div id="membership">                
+                            <h4>You must be an admin to access the membership roster.</h4>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="event-panel">
+                        <h3>Club Events:</h3>
+                        <div id="events">                
+                            <h4>You must be an admin to access events.</h4>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Login</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="firebaseui-auth-container"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Login</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="firebaseui-auth-container"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <footer class="container-fluid text-center">
-            <p>Copyright &copy; 2017 Perry High CPU Club.</p>
-        </footer>
+            <footer class="container-fluid text-center">
+                <p>Copyright &copy; 2017 Perry High CPU Club.</p>
+            </footer>
 
-        <script>
-            let users = [];
-            let admin = [];
-            let members = [];
+            <script>
+                let users = [];
+                let admin = [];
+                let members = [];
 
-            /**
-             * Load the membership roll and the admin/member roles lists
-             */
-            function loadMembership() {
-                // Load the roles lists
-                let rolesDoc = db.collection('roles').doc('list');
-                rolesDoc.get().then((docs) => {
-                    // Extract the admin and members roles arrays
-                    let data = docs.data();
-                    admin = data.admin;
-                    members = data.member;
+                /**
+                 * Load the membership roll and the admin/member roles lists
+                 */
+                function loadMembership() {
+                    // Load the roles lists
+                    let rolesDoc = db.collection('roles').doc('list');
+                    rolesDoc.get().then((docs) => {
+                        // Extract the admin and members roles arrays
+                        let data = docs.data();
+                        admin = data.admin;
+                        members = data.member;
 
-                    // Get the list of all site users
-                    db.collection('users').get()
-                            .then(function (docs) {
-                                // For each user
-                                docs.forEach((user) => {
-                                    // Get all user data
-                                    let data = user.data();
-                                    // Add the user's id to the data
-                                    data.uid = user.id;
-                                    // Add the user to the user list
-                                    users.push(data);
+                        // Get the list of all site users
+                        db.collection('users').get()
+                                .then(function (docs) {
+                                    // For each user
+                                    docs.forEach((user) => {
+                                        // Get all user data
+                                        let data = user.data();
+                                        // Add the user's id to the data
+                                        data.uid = user.id;
+                                        // Add the user to the user list
+                                        users.push(data);
+                                    });
+
+                                    // Build the user table from the retrieved data
+                                    buildUserTable();
                                 });
+                    });
+                }
 
-                                // Build the user table from the retrieved data
-                                buildUserTable();
-                            });
+                /**
+                 * Build an editable table for all of the user data
+                 */
+                function buildUserTable() {
+                    // Create an empty table and replace the warning message in the
+                    // html with the table
+                    let MEMBER_TABLE = "<table class='table table-striped'>\n\
+                                            <thead>\n\
+                                                <th>Pic</th><th>Name</th>\n\
+                                                <th>Affiliation</th>\n\
+                                                <th>Member</th>\n\
+                                                <th>Admin</th>\n\
+                                            </thead>\n\
+                                        </table>";
+                    let membership = $(MEMBER_TABLE);
+                    $('#membership').empty();
+                    $('#membership').append(membership);
+
+                    // Create a table body for the table and add it to the table
+                    let tbody = $('<tbody>');
+                    membership.append(tbody);
+
+                    // Look at every user
+                    users.forEach((user) => {
+                        // Create a row for each user
+                        let row = $('<tr>');
+                        tbody.append(row);
+
+                        // Add a cell with the user's pic
+                        let pic = $('<img>');
+                        pic.attr('src', user.pic);
+                        pic.addClass('memberpic');
+                        row.append($('<td>').append(pic));
+
+                        // Add an editable cell with the user's name
+                        let nameBox = $('<input type="text"  class="form-control"></input>');
+                        nameBox.prop('value', user.name);
+                        nameBox.attr('id', 'name_' + user.uid);
+                        nameBox.change(function () {
+                            updateUser(user.uid, 'name',
+                                    $(this).val());
+                        });
+                        nameBox.on('input', () => changed('name_' + user.uid));
+                        row.append($('<td>').append(nameBox));
+
+                        // Add an editable cell with the user's affiliation to the club
+                        let affiliationBox = $('<input type="text"  class="form-control"></input>');
+                        affiliationBox.prop('value', user.affiliation);
+                        affiliationBox.attr('id', 'affiliation_' + user.uid);
+                        affiliationBox.change(function () {
+                            updateUser(user.uid,
+                                    'affiliation', $(this).val());
+                        });
+                        affiliationBox.on('input', () => changed('affiliation_' + user.uid));
+                        row.append($('<td>').append(affiliationBox));
+
+                        // Add a checkbox for the user's membership status
+                        let memberBox = $('<input type="checkbox"></input>');
+                        memberBox.prop('checked', members.indexOf(user.uid) >= 0);
+                        memberBox.attr('id', 'member_' + user.uid);
+                        memberBox.click(function () {
+                            toggleMember(user.uid, this);
+                        });
+                        row.append($('<td>').append(memberBox));
+
+                        // Add a checkbox for the user's admin status
+                        let adminBox = $('<input type="checkbox"></input>');
+                        adminBox.prop('checked', admin.indexOf(user.uid) >= 0);
+                        adminBox.attr('id', 'admin_' + user.uid);
+                        adminBox.click(function () {
+                            toggleAdmin(user.uid, this);
+                        });
+                        row.append($('<td>').append(adminBox));
+                    });
+                }
+
+                /**
+                 * Set whether a given user is admin, based on a checkbox
+                 * 
+                 * @param {String} uid 
+                 * @param {input type=checkbox} adminBox
+                 */
+                function toggleAdmin(uid, adminBox) {
+                    adminBox = $(adminBox);
+                    adminBox.addClass('updating');
+
+                    // Determine if the user should be made admin (is the checkbox checked)
+                    let isSet = adminBox.prop('checked');
+
+                    // Determine where in the admin array the uid currently exists
+                    let userLoc = admin.indexOf(uid);
+
+                    // Remove the uid from the admin array
+                    if (userLoc >= 0) {
+                        admin.splice(userLoc, 1);
+                    }
+
+                    // If the user should be admin
+                    if (isSet) {
+                        // add the uid to the admin array
+                        admin.push(uid);
+                    }
+
+                    // Update the admin roles in the database
+                    db.collection('roles').doc('list').update({admin: admin})
+                            .then(() => adminBox.removeClass('updating'));
+                }
+
+                /**
+                 * Set whether a given user is a club member, based on a checkbox
+                 * 
+                 * @param {String} uid the user id
+                 * @param {input type=checkbox} memberBox
+                 */
+                function toggleMember(uid, memberBox) {
+                    memberBox = $(memberBox);
+                    memberBox.addClass('updating');
+
+                    // Determine if the user should be made a member (is the checkbox checked)
+                    let isSet = memberBox.prop('checked');
+
+                    // Determine where in the members array the uid currently exists
+                    let userLoc = members.indexOf(uid);
+
+                    // Remove the uid from the member array
+                    if (userLoc >= 0) {
+                        members.splice(userLoc, 1);
+                    }
+
+                    // If the user should be a member
+                    if (isSet) {
+                        // add the uid to the member array
+                        members.push(uid);
+                    }
+
+                    // Update the membership roles in the database
+                    db.collection('roles').doc('list').update({member: members})
+                            .then(() => memberBox.removeClass('updating'));
+                }
+
+                /**
+                 * Update information about a user
+                 * 
+                 * @param {String} uid the uid to update
+                 * @param {String} key the information to update
+                 * @param {String|Number} newData the data to update
+                 */
+                function updateUser(uid, key, newData) {
+                    let item = $("#" + key + "_" + uid);
+                    item.addClass('updating');
+                    item.removeClass('changed');
+
+                    // Map the update data
+                    let updateMap = {};
+                    updateMap[key] = newData;
+
+                    // Update the data in the database
+                    db.collection('users').doc(uid).update(updateMap)
+                            // When successful, remove the 'changed' indicator
+                            .then(() => item.removeClass('updating'));
+                }
+
+                /**
+                 * Add a changed indicator to any textbox when it is modified
+                 * @param {String} id
+                 */
+                function changed(id) {
+                    $('#' + id).addClass('changed');
+                }
+
+                /**
+                 * Load club membership when the page has finished loading
+                 */
+                window.addEventListener('load', function () {
+                    loadMembership();
                 });
-            }
-
-            /**
-             * Build an editable table for all of the user data
-             */
-            function buildUserTable() {
-                // Create an empty table and replace the warning message in the
-                // html with the table
-                let MEMBER_TABLE = "<table class='table table-striped'>\n\
-                                        <thead>\n\
-                                            <th>Pic</th><th>Name</th>\n\
-                                            <th>Affiliation</th>\n\
-                                            <th>Member</th>\n\
-                                            <th>Admin</th>\n\
-                                        </thead>\n\
-                                    </table>";
-                let membership = $(MEMBER_TABLE);
-                $('#membership').empty();
-                $('#membership').append(membership);
-
-                // Create a table body for the table and add it to the table
-                let tbody = $('<tbody>');
-                membership.append(tbody);
-
-                // Look at every user
-                users.forEach((user) => {
-                    // Create a row for each user
-                    let row = $('<tr>');
-                    tbody.append(row);
-
-                    // Add a cell with the user's pic
-                    let pic = $('<img>');
-                    pic.attr('src', user.pic);
-                    pic.addClass('memberpic');
-                    row.append($('<td>').append(pic));
-
-                    // Add an editable cell with the user's name
-                    let nameBox = $('<input type="text"  class="form-control"></input>');
-                    nameBox.prop('value', user.name);
-                    nameBox.attr('id', 'name_' + user.uid);
-                    nameBox.change(function () {
-                        updateUser(user.uid, 'name',
-                                $(this).val());
-                    });
-                    nameBox.on('input', () => changed('name_' + user.uid));
-                    row.append($('<td>').append(nameBox));
-
-                    // Add an editable cell with the user's affiliation to the club
-                    let affiliationBox = $('<input type="text"  class="form-control"></input>');
-                    affiliationBox.prop('value', user.affiliation);
-                    affiliationBox.attr('id', 'affiliation_' + user.uid);
-                    affiliationBox.change(function () {
-                        updateUser(user.uid,
-                                'affiliation', $(this).val());
-                    });
-                    affiliationBox.on('input', () => changed('affiliation_' + user.uid));
-                    row.append($('<td>').append(affiliationBox));
-
-                    // Add a checkbox for the user's membership status
-                    let memberBox = $('<input type="checkbox"></input>');
-                    memberBox.prop('checked', members.indexOf(user.uid) >= 0);
-                    memberBox.attr('id', 'member_' + user.uid);
-                    memberBox.click(function () {
-                        toggleMember(user.uid, this);
-                    });
-                    row.append($('<td>').append(memberBox));
-
-                    // Add a checkbox for the user's admin status
-                    let adminBox = $('<input type="checkbox"></input>');
-                    adminBox.prop('checked', admin.indexOf(user.uid) >= 0);
-                    adminBox.attr('id', 'admin_' + user.uid);
-                    adminBox.click(function () {
-                        toggleAdmin(user.uid, this);
-                    });
-                    row.append($('<td>').append(adminBox));
-                });
-            }
-
-            /**
-             * Set whether a given user is admin, based on a checkbox
-             * 
-             * @param {String} uid 
-             * @param {input type=checkbox} adminBox
-             */
-            function toggleAdmin(uid, adminBox) {
-                adminBox = $(adminBox);
-                adminBox.addClass('updating');
-
-                // Determine if the user should be made admin (is the checkbox checked)
-                let isSet = adminBox.prop('checked');
-
-                // Determine where in the admin array the uid currently exists
-                let userLoc = admin.indexOf(uid);
-
-                // Remove the uid from the admin array
-                if (userLoc >= 0) {
-                    admin.splice(userLoc, 1);
-                }
-
-                // If the user should be admin
-                if (isSet) {
-                    // add the uid to the admin array
-                    admin.push(uid);
-                }
-
-                // Update the admin roles in the database
-                db.collection('roles').doc('list').update({admin: admin})
-                        .then(() => adminBox.removeClass('updating'));
-            }
-
-            /**
-             * Set whether a given user is a club member, based on a checkbox
-             * 
-             * @param {String} uid the user id
-             * @param {input type=checkbox} memberBox
-             */
-            function toggleMember(uid, memberBox) {
-                memberBox = $(memberBox);
-                memberBox.addClass('updating');
-
-                // Determine if the user should be made a member (is the checkbox checked)
-                let isSet = memberBox.prop('checked');
-
-                // Determine where in the members array the uid currently exists
-                let userLoc = members.indexOf(uid);
-
-                // Remove the uid from the member array
-                if (userLoc >= 0) {
-                    members.splice(userLoc, 1);
-                }
-
-                // If the user should be a member
-                if (isSet) {
-                    // add the uid to the member array
-                    members.push(uid);
-                }
-
-                // Update the membership roles in the database
-                db.collection('roles').doc('list').update({member: members})
-                        .then(() => memberBox.removeClass('updating'));
-            }
-
-            /**
-             * Update information about a user
-             * 
-             * @param {String} uid the uid to update
-             * @param {String} key the information to update
-             * @param {String|Number} newData the data to update
-             */
-            function updateUser(uid, key, newData) {
-                let item = $("#" + key + "_" + uid);
-                item.addClass('updating');
-                item.removeClass('changed');
-
-                // Map the update data
-                let updateMap = {};
-                updateMap[key] = newData;
-
-                // Update the data in the database
-                db.collection('users').doc(uid).update(updateMap)
-                        // When successful, remove the 'changed' indicator
-                        .then(() => item.removeClass('updating'));
-            }
-
-            /**
-             * Add a changed indicator to any textbox when it is modified
-             * @param {String} id
-             */
-            function changed(id) {
-                $('#' + id).addClass('changed');
-            }
-
-            /**
-             * Load club membership when the page has finished loading
-             */
-            window.addEventListener('load', function () {
-                loadMembership();
-            });
-        </script>
+            </script>
     </body>
 </html>
