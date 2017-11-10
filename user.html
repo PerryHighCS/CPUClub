@@ -69,47 +69,93 @@
 
         <div class="container-fluid bg-3"> 
             <div class="container-fluid">
-                <div class="row">
-                    <h2>Member info:</h2>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <form role="form">
-                                    <div class="form-group">
-                                        <label for="userName">
-                                            Name
-                                        </label>
-                                        <input type="text" class="form-control" id="userName" />
-                                    </div>
-                                    <div class="form-group">
 
-                                        <label for="affiliation">
-                                            Affiliation
-                                        </label>
-                                        <input type="password" class="form-control" id="affiliation" />
-                                    </div> 
-                                    <button class="btn btn-default pull-right" onclick="return false;">
-                                        Update
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <button class="btn btn-primary btn-sm btn-overlay"><span class="glyphicon glyphicon-edit"></span></button>
-                                <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" />
-                                
-                            </div>
+                <div class="row rowmt">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel  panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Profile</h3>
+                                    </div>
+                                    <div class="panel-body container-fluid">
+
+                                        <form role="form">
+                                            <div class="container-fluid nol rowbt">
+                                                <div class="col-md-6 nol ">
+
+                                                    <form role="form ">
+                                                        <div class="form-group">
+                                                            <label for="userName">
+                                                                Name
+                                                            </label>
+                                                            <input type="text" class="form-control" id="userName" />
+                                                        </div>
+                                                        <div class="form-group">
+
+                                                            <label for="affiliation">
+                                                                Affiliation
+                                                            </label>
+                                                            <div class="input-group dropdown">
+                                                                <input type="text" class="form-control dropdown-toggle"  id="affiliation" />
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="#">Class of 2018</a></li>
+                                                                    <li><a href="#">Class of 2019</a></li>
+                                                                    <li><a href="#">Class of 2020</a></li>
+                                                                    <li><a href="#">Class of 2021</a></li>
+                                                                    <li class="divider"></li>
+                                                                    <li><a href="#">Club President</a></li>
+                                                                    <li><a href="#">Club Vice President</a></li>
+                                                                    <li><a href="#">Club Treasurer</a></li>
+                                                                    <li><a href="#">Club Secretary</a></li>
+
+                                                                </ul>
+                                                                <span role="button" class="input-group-addon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></span>
+                                                            </div>
+                                                        </div> 
+                                                </div>
+                                                <div class="col-md-4 text-center">
+                                                    <button class="btn btn-primary btn-sm btn-overlay"><span class="glyphicon glyphicon-edit"></span></button>
+                                                    <img alt="Bootstrap Image Preview" src="http://lorempixel.com/240/240/" />
+
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-default pull-right" onclick="return false;" disabled >
+                                                Update
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-primary rowmt">
+                                    <div class="panel-heading ">
+                                        <h3 class="panel-title">Badges</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                        <img class="img-circle img-responsive clubbadge" src="http://lorempixel.com/64/64/">
+                                    </div>
+                                </div>
+                            </div>    
                             <div class="col-md-4">
-                                <div class="list-group">
-                                    <span class="list-group-item active">Portfolio<button class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
-                                </span>
+                                <div class="list-group list-group-primary">
+                                    <span class="list-group-item active">
+                                        Portfolio
+                                        <button class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-share-alt"></span></button>
+                                        <button class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    </span>
                                     <div class="list-group-item">
                                         <span class="list-group-item-text">
                                             Project 1
                                         </span>
                                     </div>
-                                    <div class="list-group-item">
+                                    <div class="list-group-item ">
                                         <p class="list-group-item-text">
                                             Project 2
                                         </p>
@@ -120,9 +166,9 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="list-group">
+                                <div class="list-group list-group-primary">
                                     <span class="list-group-item active">Events<button class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-calendar"></span></button>
-                                </span>
+                                    </span>
                                     <div class="list-group-item">
                                         <span class="list-group-item-text">
                                             <span class="glyphicon glyphicon-check"></span>&nbsp;Event 1
@@ -182,9 +228,17 @@
             </div>
         </div>
 
-
         <footer class="container-fluid text-center">
             <p>Copyright &copy; 2017 Perry High CPU Club.</p>
         </footer>
+
+        <script>
+            $(function () {
+                $('.dropdown-menu a').click(function () {
+                    $(this).closest('.dropdown').find('input:text')
+                            .val($(this).text());
+                });
+            });
+        </script>
     </body>
 </html>

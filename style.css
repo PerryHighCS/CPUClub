@@ -46,3 +46,26 @@ footer {
     left: 0px;
     width: 100%;
 }
+
+.input-group .dropdown-menu {
+    width: 100%;
+}
+
+.clubbadge {
+    max-width: 64px;
+    max-height: 64px;
+    margin: 12px;
+    display: inline-block;
+}
+
+.rowmt {
+    margin-top: 24px;
+}
+
+.rowbt {
+    margin-bottom: 12px;
+}
+
+.nol {
+    padding-left: 0px;
+}
