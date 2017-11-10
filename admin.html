@@ -53,7 +53,15 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li id="sign-in"><a href="#" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Sign in</a></li>
-                        <li id="sign-out"><a href="#" onclick="firebase.auth().signOut();"> <span class="glyphicon glyphicon-log-out"></span>&nbsp;Sign out <span id="username"></span></a></li>
+                        <li id="signedin">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span id="username"></span>&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Profile</a></li>                                
+                                <li><a href="#">Portfolio</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" onclick="firebase.auth().signOut();">Sign out&nbsp;<span class="glyphicon glyphicon-log-out"></span></a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -141,7 +149,7 @@
                                             <th>Member</th>\n\
                                             <th>Admin</th>\n\
                                         </thead>\n\
-                                    </table>";                                  
+                                    </table>";
                 let membership = $(MEMBER_TABLE);
                 $('#membership').empty();
                 $('#membership').append(membership);
@@ -166,8 +174,10 @@
                     let nameBox = $('<input type="text"  class="form-control"></input>');
                     nameBox.prop('value', user.name);
                     nameBox.attr('id', 'name_' + user.uid);
-                    nameBox.change(function(){updateUser(user.uid, 'name', 
-                                              $(this).val());});
+                    nameBox.change(function () {
+                        updateUser(user.uid, 'name',
+                                $(this).val());
+                    });
                     nameBox.on('input', () => changed('name_' + user.uid));
                     row.append($('<td>').append(nameBox));
 
@@ -175,8 +185,10 @@
                     let affiliationBox = $('<input type="text"  class="form-control"></input>');
                     affiliationBox.prop('value', user.affiliation);
                     affiliationBox.attr('id', 'affiliation_' + user.uid);
-                    affiliationBox.change(function(){updateUser(user.uid, 
-                                                     'affiliation', $(this).val());});
+                    affiliationBox.change(function () {
+                        updateUser(user.uid,
+                                'affiliation', $(this).val());
+                    });
                     affiliationBox.on('input', () => changed('affiliation_' + user.uid));
                     row.append($('<td>').append(affiliationBox));
 
@@ -184,14 +196,18 @@
                     let memberBox = $('<input type="checkbox"></input>');
                     memberBox.prop('checked', members.indexOf(user.uid) >= 0);
                     memberBox.attr('id', 'member_' + user.uid);
-                    memberBox.click(function () {toggleMember(user.uid, this);});
+                    memberBox.click(function () {
+                        toggleMember(user.uid, this);
+                    });
                     row.append($('<td>').append(memberBox));
 
                     // Add a checkbox for the user's admin status
                     let adminBox = $('<input type="checkbox"></input>');
                     adminBox.prop('checked', admin.indexOf(user.uid) >= 0);
                     adminBox.attr('id', 'admin_' + user.uid);
-                    adminBox.click(function () {toggleAdmin(user.uid, this);});
+                    adminBox.click(function () {
+                        toggleAdmin(user.uid, this);
+                    });
                     row.append($('<td>').append(adminBox));
                 });
             }
@@ -205,7 +221,7 @@
             function toggleAdmin(uid, adminBox) {
                 adminBox = $(adminBox);
                 adminBox.addClass('updating');
-                
+
                 // Determine if the user should be made admin (is the checkbox checked)
                 let isSet = adminBox.prop('checked');
 
@@ -237,7 +253,7 @@
             function toggleMember(uid, memberBox) {
                 memberBox = $(memberBox);
                 memberBox.addClass('updating');
-                
+
                 // Determine if the user should be made a member (is the checkbox checked)
                 let isSet = memberBox.prop('checked');
 
@@ -271,7 +287,7 @@
                 let item = $("#" + key + "_" + uid);
                 item.addClass('updating');
                 item.removeClass('changed');
-                
+
                 // Map the update data
                 let updateMap = {};
                 updateMap[key] = newData;

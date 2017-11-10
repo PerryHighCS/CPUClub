@@ -53,7 +53,15 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li id="sign-in"><a href="#" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Sign in</a></li>
-                        <li id="sign-out"><a href="#" onclick="firebase.auth().signOut();"> <span class="glyphicon glyphicon-log-out"></span>&nbsp;Sign out <span id="username"></span></a></li>
+                        <li id="signedin">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span id="username"></span>&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Profile</a></li>                                
+                                <li><a href="#">Portfolio</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" onclick="firebase.auth().signOut();">Sign out&nbsp;<span class="glyphicon glyphicon-log-out"></span></a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

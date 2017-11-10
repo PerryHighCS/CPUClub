@@ -54,11 +54,11 @@ initApp = function () {
             getClubUser(user.uid, user);
             
             $('#sign-in').hide();
-            $('#sign-out').show();            
+            $('#signedin').show();            
         } else {
             // User is signed out.                        
             $('#sign-in').show();
-            $('#sign-out').hide();
+            $('#signedin').hide();
             $('#username').text("");
             $('.admin').hide();
             $('.member').hide();
@@ -112,6 +112,6 @@ function getClubUser(uid, authuser) {
 function setClubUser(data, uid) {
     clubuser = data;
     clubuser.uid = uid;
-    $('#username').text("(" + data.name + ")");
+    $('#username').text(data.name);
     
 }
