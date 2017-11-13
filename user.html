@@ -89,38 +89,42 @@
                                                             <label for="userName">
                                                                 Name
                                                             </label>
-                                                            <input type="text" class="form-control" id="userName" />
+                                                            <span id="userName">
+                                                                <input type="text" class="form-control editUser" id="userNameInput" />
+                                                                <p id="userNameText" class="showUser">User Name Here</p>
+                                                            </span>
                                                         </div>
                                                         <div class="form-group">
 
                                                             <label for="affiliation">
                                                                 Affiliation
                                                             </label>
-                                                            <div class="input-group dropdown">
-                                                                <input type="text" class="form-control dropdown-toggle"  id="affiliation" />
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="#">Class of 2018</a></li>
-                                                                    <li><a href="#">Class of 2019</a></li>
-                                                                    <li><a href="#">Class of 2020</a></li>
-                                                                    <li><a href="#">Class of 2021</a></li>
-                                                                    <li class="divider"></li>
-                                                                    <li><a href="#">Club President</a></li>
-                                                                    <li><a href="#">Club Vice President</a></li>
-                                                                    <li><a href="#">Club Treasurer</a></li>
-                                                                    <li><a href="#">Club Secretary</a></li>
-
-                                                                </ul>
-                                                                <span role="button" class="input-group-addon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></span>
-                                                            </div>
+                                                                <div class="input-group dropdown editUser table">
+                                                                    <input type="text" class="form-control "  id="affiliationInput" />
+                                                                    <span role="button" class="input-group-addon dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></span>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#">Class of 2018</a></li>
+                                                                        <li><a href="#">Class of 2019</a></li>
+                                                                        <li><a href="#">Class of 2020</a></li>
+                                                                        <li><a href="#">Class of 2021</a></li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="#">Club President</a></li>
+                                                                        <li><a href="#">Club Vice President</a></li>
+                                                                        <li><a href="#">Club Treasurer</a></li>
+                                                                        <li><a href="#">Club Secretary</a></li>
+                                                                    </ul>                                                                    
+                                                                </div>
+                                                                <p id="affiliationText" class="showUser">Class of 2018</p>
+                                                            <!-- </span> -->
                                                         </div> 
                                                 </div>
                                                 <div class="col-md-4 text-center">
-                                                    <button class="btn btn-primary btn-sm btn-overlay"><span class="glyphicon glyphicon-edit"></span></button>
+                                                    <button class="btn btn-primary btn-sm btn-overlay editUser"><span class="glyphicon glyphicon-edit"></span></button>
                                                     <img alt="Bootstrap Image Preview" src="http://lorempixel.com/240/240/" />
 
                                                 </div>
                                             </div>
-                                            <button class="btn btn-default pull-right" onclick="return false;" disabled >
+                                            <button class="btn btn-default pull-right editUser" onclick="return false;" disabled >
                                                 Update
                                             </button>
                                         </form>
@@ -238,6 +242,21 @@
                     $(this).closest('.dropdown').find('input:text')
                             .val($(this).text());
                 });
+            });
+            
+            var displayID = null;
+            
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user !== null && 
+                        (displayID === user.uid || displayID === null)) {
+                    $('.editUser').show();
+                    $('.editUser.table').css('display', 'table');
+                    $('.showUser').hide();
+                }
+                else {
+                    $('.editUser').hide();
+                    $('.showUser').show();
+                }
             });
         </script>
     </body>
